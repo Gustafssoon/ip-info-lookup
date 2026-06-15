@@ -1,1 +1,8 @@
+# Ignorerar den riktiga .env-filen eftersom den innehåller API-token.
 .env
+
+# Ignorerar loggfiler om projektet senare skapar sådana.
+*.log
+
+# Ignorerar exportmapp om resultat sparas till fil senare.
+exports/
