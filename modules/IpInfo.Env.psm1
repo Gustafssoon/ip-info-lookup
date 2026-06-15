@@ -4,10 +4,14 @@ function Import-IpInfoEnv {
     )
 
     if (-not (Test-Path $Path)) {
-        throw ".env-filen hittades inte."
+        throw ".env-filen hittades inte. Skapa en .env-fil med IPINFO_TOKEN=din_token."
     }
 
     Get-Content $Path | ForEach-Object {
+        if ($_ -match "^\s*$" -or $_ -match "^\s*#") {
+            return
+        }
+
         $parts = $_ -split "=", 2
 
         if ($parts.Count -eq 2) {
@@ -16,6 +20,10 @@ function Import-IpInfoEnv {
 
             [System.Environment]::SetEnvironmentVariable($name, $value, "Process")
         }
+    }
+
+    if (-not $env:IPINFO_TOKEN) {
+        throw "IPINFO_TOKEN saknas i .env-filen."
     }
 }
 
