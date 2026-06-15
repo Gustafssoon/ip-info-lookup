@@ -1,5 +1,7 @@
 function Get-IpInfo {
     param (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [string]$IpAddress
     )
 
