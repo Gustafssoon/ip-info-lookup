@@ -1,7 +1,7 @@
-# Tar emot IP-adressen som användaren vill slå upp.
+﻿# Tar emot IP-adressen som användaren vill slå upp.
+# Om ingen IP-adress skickas in får användaren skriva in den.
 param (
-    [Parameter(Mandatory = $true)]
-    [ValidateNotNullOrEmpty()]
+    [Parameter(Mandatory = $false)]
     [string]$IpAddress
 )
 
@@ -11,6 +11,11 @@ Import-Module (Join-Path $PSScriptRoot "modules/IpInfo.Env.psm1") -Force
 Import-Module (Join-Path $PSScriptRoot "modules/IpInfo.Api.psm1") -Force
 Import-Module (Join-Path $PSScriptRoot "modules/IpInfo.Format.psm1") -Force
 
+# Om ingen IP-adress skickas in frågar scriptet användaren.
+if ([string]::IsNullOrWhiteSpace($IpAddress)) {
+    $IpAddress = Read-Host "Skriv in IP-adress"
+}
+
 # Läser in API-token från .env-filen.
 Import-IpInfoEnv -Path (Join-Path $PSScriptRoot ".env")
 
@@ -19,3 +24,6 @@ $result = Get-IpInfo -IpAddress $IpAddress
 
 # Visar API-svaret i lättläst format.
 Show-IpInfoResult -IpInfo $result
+
+# Gör att fönstret inte stängs direkt vid Run with PowerShell.
+Read-Host "Tryck Enter för att avsluta"
