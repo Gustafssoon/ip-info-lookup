@@ -16,6 +16,13 @@ if ([string]::IsNullOrWhiteSpace($IpAddress)) {
     $IpAddress = Read-Host "Skriv in IP-adress"
 }
 
+# Om användaren fortfarande inte har skrivit någon IP-adress avslutas scriptet.
+if ([string]::IsNullOrWhiteSpace($IpAddress)) {
+    Write-Host "Ingen IP-adress angavs. Scriptet avslutas." -ForegroundColor Yellow
+    Read-Host "Tryck Enter för att avsluta"
+    exit
+}
+
 # Läser in API-token från .env-filen.
 Import-IpInfoEnv -Path (Join-Path $PSScriptRoot ".env")
 
@@ -25,5 +32,5 @@ $result = Get-IpInfo -IpAddress $IpAddress
 # Visar API-svaret i lättläst format.
 Show-IpInfoResult -IpInfo $result
 
-# Gör att fönstret inte stängs direkt vid Run with PowerShell.
+# Stannar scriptet så att användaren kan se resultatet innan det avslutas.
 Read-Host "Tryck Enter för att avsluta"
